@@ -25,7 +25,8 @@ class IndexGameRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::enum(GameStatus::class)],
+            'status' => ['nullable', Rule::enum(GameStatus::class)],
+            'title' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

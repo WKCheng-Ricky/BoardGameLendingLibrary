@@ -14,8 +14,13 @@ class GameController extends Controller
 {
     public function index(IndexGameRequest $request): JsonResponse
     {
+        $status = $request->validated('status');
+        $title = $request->validated('title');
+
         $games = Game::query()
-            ->where('status', $request->validated('status'))
+            ->when($status, fn ($query, $status) => $query->where('status', $status))
+            ->when($title, fn ($query, $title) => $query->where('title', 'like', "%{$title}%"))
+            ->when(! $status, fn ($query) => $query->limit(1000))
             ->get();
 
         return response()->json(['data' => $games]);

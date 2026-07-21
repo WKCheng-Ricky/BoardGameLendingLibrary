@@ -35,12 +35,42 @@ class GameControllerTest extends TestCase
         $response->assertExactJson(['data' => []]);
     }
 
-    public function test_it_requires_status_query_param(): void
+    public function test_it_lists_all_games_when_status_is_omitted(): void
     {
+        $available = Game::factory()->create(['status' => GameStatus::Available]);
+        $retired = Game::factory()->create(['status' => GameStatus::Retired]);
+
         $response = $this->getJson('/api/games');
 
-        $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['status']);
+        $response->assertOk();
+        $response->assertJsonCount(2, 'data');
+        $response->assertJsonPath('data.0.id', $available->id);
+        $response->assertJsonPath('data.1.id', $retired->id);
+    }
+
+    public function test_it_filters_games_by_title(): void
+    {
+        $catan = Game::factory()->create(['title' => 'Catan']);
+        Game::factory()->create(['title' => 'Wingspan']);
+
+        $response = $this->getJson('/api/games?title=cat');
+
+        $response->assertOk();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.id', $catan->id);
+    }
+
+    public function test_it_filters_games_by_status_and_title_together(): void
+    {
+        $match = Game::factory()->create(['title' => 'Catan', 'status' => GameStatus::Available]);
+        Game::factory()->create(['title' => 'Catan', 'status' => GameStatus::Retired]);
+        Game::factory()->create(['title' => 'Wingspan', 'status' => GameStatus::Available]);
+
+        $response = $this->getJson('/api/games?status='.GameStatus::Available->value.'&title=cat');
+
+        $response->assertOk();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.id', $match->id);
     }
 
     public function test_it_rejects_invalid_status_query_param(): void

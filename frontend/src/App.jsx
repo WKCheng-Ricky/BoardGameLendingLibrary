@@ -5,15 +5,31 @@ import AddGameModal from './components/AddGameModal'
 import { listGames } from './api/games'
 import './App.css'
 
+const SEARCH_DEBOUNCE_MS = 350
+
 function App() {
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isAddModalOpen, setAddModalOpen] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [reloadToken, setReloadToken] = useState(0)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedSearch(search), SEARCH_DEBOUNCE_MS)
+    return () => clearTimeout(timeout)
+  }, [search])
 
   useEffect(() => {
     let cancelled = false
-    listGames()
+    setLoading(true)
+    setError(null)
+    listGames({
+      status: statusFilter === 'all' ? undefined : statusFilter,
+      title: debouncedSearch || undefined,
+    })
       .then(({ data }) => {
         if (!cancelled) setGames(data)
       })
@@ -26,16 +42,14 @@ function App() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [statusFilter, debouncedSearch, reloadToken])
 
-  function handleGameCreated(newGame) {
-    setGames((current) => [...current, newGame])
+  function handleGameCreated() {
+    setReloadToken((token) => token + 1)
   }
 
-  function handleStatusChanged(updatedGame) {
-    setGames((current) =>
-      current.map((game) => (game.id === updatedGame.id ? updatedGame : game)),
-    )
+  function handleStatusChanged() {
+    setReloadToken((token) => token + 1)
   }
 
   return (
@@ -46,7 +60,14 @@ function App() {
         {loading && <p className="status-message">Loading games…</p>}
         {error && <p className="status-message error">{error}</p>}
         {!loading && !error && (
-          <GamesTable games={games} onStatusChanged={handleStatusChanged} />
+          <GamesTable
+            games={games}
+            statusFilter={statusFilter}
+            search={search}
+            onStatusFilterChange={setStatusFilter}
+            onSearchChange={setSearch}
+            onStatusChanged={handleStatusChanged}
+          />
         )}
       </main>
 

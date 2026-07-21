@@ -1,20 +1,14 @@
-import { useMemo, useState } from 'react'
 import { STATUSES, STATUS_LABELS } from '../constants/game'
 import GamesTableRow from './GamesTableRow'
 
-function GamesTable({ games, onStatusChanged }) {
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [search, setSearch] = useState('')
-
-  const filteredGames = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    return games.filter((game) => {
-      const matchesStatus = statusFilter === 'all' || game.status === statusFilter
-      const matchesSearch = !term || game.title.toLowerCase().includes(term)
-      return matchesStatus && matchesSearch
-    })
-  }, [games, statusFilter, search])
-
+function GamesTable({
+  games,
+  statusFilter,
+  search,
+  onStatusFilterChange,
+  onSearchChange,
+  onStatusChanged,
+}) {
   return (
     <div className="games-table-panel">
       <div className="table-controls">
@@ -22,7 +16,7 @@ function GamesTable({ games, onStatusChanged }) {
           <button
             type="button"
             className={statusFilter === 'all' ? 'filter-chip active' : 'filter-chip'}
-            onClick={() => setStatusFilter('all')}
+            onClick={() => onStatusFilterChange('all')}
           >
             All
           </button>
@@ -31,7 +25,7 @@ function GamesTable({ games, onStatusChanged }) {
               key={status}
               type="button"
               className={statusFilter === status ? 'filter-chip active' : 'filter-chip'}
-              onClick={() => setStatusFilter(status)}
+              onClick={() => onStatusFilterChange(status)}
             >
               {STATUS_LABELS[status]}
             </button>
@@ -42,7 +36,7 @@ function GamesTable({ games, onStatusChanged }) {
           className="search-input"
           placeholder="Search by title…"
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => onSearchChange(event.target.value)}
           aria-label="Search games by title"
         />
       </div>
@@ -56,14 +50,14 @@ function GamesTable({ games, onStatusChanged }) {
           </tr>
         </thead>
         <tbody>
-          {filteredGames.length === 0 ? (
+          {games.length === 0 ? (
             <tr>
               <td colSpan={3} className="empty-state">
                 No games match your filters.
               </td>
             </tr>
           ) : (
-            filteredGames.map((game) => (
+            games.map((game) => (
               <GamesTableRow key={game.id} game={game} onStatusChanged={onStatusChanged} />
             ))
           )}

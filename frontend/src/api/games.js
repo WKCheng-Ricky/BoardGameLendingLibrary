@@ -1,60 +1,44 @@
-// Games API client. Currently backed by an in-memory mock store
-// (`mockGameStore.js`) since the Laravel Games API doesn't exist yet
-// (BGLL-05). Every function here is async and returns/throws in a shape that
-// mirrors a real REST client (`{ data }` on success, a thrown error with
-// `status`/`errors` on failure), so once the real API ships, only the
-// internals of this file need to change — components already call these
-// functions and never touch the mock store directly.
-import { CATEGORIES } from '../constants/game'
-import {
-  delay,
-  findGame,
-  getGames,
-  insertGame,
-  setGameStatus,
-} from './mockGameStore'
+// Games API client — talks to the Laravel backend (`backend/routes/api.php`).
+// Every function is async and returns/throws in a shape components rely on:
+// `{ data }` on success, a thrown error with `status`/`errors` on failure.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api'
 
-export async function listGames() {
-  await delay()
-  return { data: [...getGames()] }
+async function handleResponse(response) {
+  const body = await response.json().catch(() => null)
+
+  if (!response.ok) {
+    const error = new Error(body?.message || 'Request failed')
+    error.status = response.status
+    if (body?.errors) error.errors = body.errors
+    throw error
+  }
+
+  return body
+}
+
+export async function listGames({ status, title } = {}) {
+  const params = new URLSearchParams()
+  if (status) params.set('status', status)
+  if (title) params.set('title', title)
+
+  const response = await fetch(`${API_BASE_URL}/games?${params.toString()}`)
+  return handleResponse(response)
 }
 
 export async function createGame({ title, category }) {
-  await delay()
-
-  const errors = {}
-  if (!title || !title.trim()) {
-    errors.title = 'Title is required.'
-  }
-  if (!CATEGORIES.includes(category)) {
-    errors.category = 'Please select a valid category.'
-  }
-  if (Object.keys(errors).length > 0) {
-    const error = new Error('Validation failed')
-    error.status = 422
-    error.errors = errors
-    throw error
-  }
-
-  const game = insertGame({ title: title.trim(), category })
-  return { data: game }
+  const response = await fetch(`${API_BASE_URL}/games`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ title, category }),
+  })
+  return handleResponse(response)
 }
 
 export async function updateGameStatus(id, status) {
-  await delay()
-
-  const game = findGame(id)
-  if (!game) {
-    const error = new Error('Game not found')
-    error.status = 404
-    throw error
-  }
-  if (game.status === 'retired') {
-    const error = new Error('Retired games cannot change status')
-    error.status = 409
-    throw error
-  }
-
-  const updated = setGameStatus(id, status)
-  return { data: updated }
+  const response = await fetch(`${API_BASE_URL}/games/${id}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ status }),
+  })
+  return handleResponse(response)
 }
