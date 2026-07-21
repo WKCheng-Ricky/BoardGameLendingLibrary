@@ -53,7 +53,7 @@ erDiagram
 ||`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
 ||`feature/BGLL-04`|Create ORM model in Laravel|
 ||`feature/BGLL-05`|Create API for CRUD of `Games` record|
-||`feature/BGLL-06`|Create React base repository|
+|In-Progress|`feature/BGLL-06`|Create React base repository|
 ||`feature/BGLL-07`|Create Frontend Page|
 
 
