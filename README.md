@@ -48,7 +48,7 @@ erDiagram
 
 |progress|ticket|description|
 |-|-|-|
-|In-Progress|`feature/BGLL-01`|Create Laravel Base repository. Create Docker-compose base for Laravel and Mysql 8.4 (Laravel Sail default for PHP 8, decoupled API app in `backend/`)|
+|Completed|`feature/BGLL-01`|Create Laravel Base repository. Create Docker-compose base for Laravel and Mysql 8.4 (Laravel Sail default for PHP 8, decoupled API app in `backend/`)|
 ||`feature/BGLL-02`|Create Schema for `Games` in MySQL|
 ||`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
 ||`feature/BGLL-04`|Create ORM model in Laravel|
