@@ -52,9 +52,11 @@ erDiagram
 |Completed|`feature/BGLL-02`|Create Schema for `Games` in MySQL|
 |Dropped, use "php artisan migrate"|`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
 |Completed|`feature/BGLL-04`|Create ORM model in Laravel|
-|Worktree - Seperate development|`feature/BGLL-05`|Create API for CRUD of `Games` record|
+|Completed|`feature/BGLL-05`|Create API for CRUD of `Games` record|
 |Completed|`feature/BGLL-06`|Create React base repository|
-|Worktree - Seperate development|`feature/BGLL-07`|Create Frontend Page|
+|Completed|`feature/BGLL-07`|Create Frontend Page|
+|In-Progress|`feature/BGLL-08`|Verify and test implementation from AI|
+
 
 ## Running the full stack (demo)
 
