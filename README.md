@@ -55,7 +55,8 @@ erDiagram
 |Completed|`feature/BGLL-05`|Create API for CRUD of `Games` record|
 |Completed|`feature/BGLL-06`|Create React base repository|
 |Completed|`feature/BGLL-07`|Create Frontend Page|
-|In-Progress|`feature/BGLL-08`|Verify and test implementation from AI|
+|Completed|`feature/BGLL-08`|Verify and test implementation from AI|
+|Insufficient Time|`feature/BGLL-09`|Login Page for authorization|
 
 
 ## Running the full stack (demo)
