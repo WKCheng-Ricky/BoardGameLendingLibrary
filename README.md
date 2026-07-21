@@ -46,15 +46,15 @@ erDiagram
 
 ## Feature distribution
 
-|ticket|description|
-|-|-|
-|`feature/BGLL-01`|Create Laravel Base repository. Create Docker-compose base for Laravel and Mysql 8.0|
-|`feature/BGLL-02`|Create Schema for `Games` in MySQL|
-|`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
-|`feature/BGLL-04`|Create ORM model in Laravel|
-|`feature/BGLL-05`|Create API for CRUD of `Games` record|
-|`feature/BGLL-06`|Create React base repository|
-|`feature/BGLL-07`|Create Frontend Page|
+|progress|ticket|description|
+|-|-|-|
+|In-Progress|`feature/BGLL-01`|Create Laravel Base repository. Create Docker-compose base for Laravel and Mysql 8.0|
+||`feature/BGLL-02`|Create Schema for `Games` in MySQL|
+||`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
+||`feature/BGLL-04`|Create ORM model in Laravel|
+||`feature/BGLL-05`|Create API for CRUD of `Games` record|
+||`feature/BGLL-06`|Create React base repository|
+||`feature/BGLL-07`|Create Frontend Page|
 
 
 
