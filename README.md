@@ -56,5 +56,18 @@ erDiagram
 |In-Progress|`feature/BGLL-06`|Create React base repository|
 ||`feature/BGLL-07`|Create Frontend Page|
 
+## Running the full stack (demo)
+
+There's a root-level `compose.yaml` that `include`s both `backend/compose.yaml` and `frontend/compose.yaml`, so the whole stack (Laravel + MySQL + React/Vite) can be started with one command from the repo root:
+
+```bash
+WWWUSER=$(id -u) WWWGROUP=$(id -g) docker compose --env-file backend/.env up --build
+```
+
+- The `WWWUSER`/`WWWGROUP` and `--env-file backend/.env` are needed because, unlike `./vendor/bin/sail up` (run from `backend/`), plain `docker compose` from the root doesn't auto-export those or auto-load `backend/.env`.
+- Frontend: http://localhost:5175
+- Backend: http://localhost
+
+For day-to-day backend-only development, `./vendor/bin/sail up` from `backend/` still works as normal (see `backend/compose.yaml`) — just don't run both stacks at once, since they'd fight over the same ports (80, 3306, 5173).
 
 

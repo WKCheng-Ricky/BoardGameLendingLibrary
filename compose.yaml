@@ -1,0 +1,10 @@
+# Root-level compose file for running the full stack (backend + frontend)
+# together with a single command, e.g. for demo/interview purposes:
+#
+#   docker compose up
+#
+# Each service's own compose file (backend/compose.yaml, frontend/compose.yaml)
+# can still be run independently for day-to-day development.
+include:
+    - backend/compose.yaml
+    - frontend/compose.yaml
