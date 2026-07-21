@@ -12,6 +12,45 @@ class GameControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_it_lists_games_filtered_by_status(): void
+    {
+        $available = Game::factory()->create(['status' => GameStatus::Available]);
+        Game::factory()->create(['status' => GameStatus::Retired]);
+
+        $response = $this->getJson('/api/games?status='.GameStatus::Available->value);
+
+        $response->assertOk();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.id', $available->id);
+        $response->assertJsonPath('data.0.status', GameStatus::Available->value);
+    }
+
+    public function test_it_returns_empty_list_when_no_games_match_status(): void
+    {
+        Game::factory()->create(['status' => GameStatus::Available]);
+
+        $response = $this->getJson('/api/games?status='.GameStatus::Retired->value);
+
+        $response->assertOk();
+        $response->assertExactJson(['data' => []]);
+    }
+
+    public function test_it_requires_status_query_param(): void
+    {
+        $response = $this->getJson('/api/games');
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['status']);
+    }
+
+    public function test_it_rejects_invalid_status_query_param(): void
+    {
+        $response = $this->getJson('/api/games?status=bogus');
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['status']);
+    }
+
     public function test_it_creates_a_game_with_valid_title_and_category(): void
     {
         $response = $this->postJson('/api/games', [
