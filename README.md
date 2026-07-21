@@ -61,10 +61,11 @@ erDiagram
 There's a root-level `compose.yaml` that `include`s both `backend/compose.yaml` and `frontend/compose.yaml`, so the whole stack (Laravel + MySQL + React/Vite) can be started with one command from the repo root:
 
 ```bash
-WWWUSER=$(id -u) WWWGROUP=$(id -g) docker compose --env-file backend/.env up --build
+docker compose up --build
 ```
 
-- The `WWWUSER`/`WWWGROUP` and `--env-file backend/.env` are needed because, unlike `./vendor/bin/sail up` (run from `backend/`), plain `docker compose` from the root doesn't auto-export those or auto-load `backend/.env`.
+- `.env` at the repo root is a symlink to `backend/.env`, so plain `docker compose` (which only auto-loads a `.env` from the directory it's run in) still picks up the same DB/app config Sail uses.
+- `WWWUSER`/`WWWGROUP` default to `1000` in `backend/compose.yaml` so the container's file ownership matches a typical single-user Linux/WSL setup without needing `./vendor/bin/sail`'s auto-export. Override them (`WWWUSER=$(id -u) WWWGROUP=$(id -g) docker compose up --build`) if your host user isn't UID/GID 1000.
 - Frontend: http://localhost:5175
 - Backend: http://localhost:8080
 
