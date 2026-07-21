@@ -18,7 +18,8 @@ return new class extends Migration
             $table->enum('status', ['available', 'reserved', 'on_loan', 'retired'])->default('available');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
     }
 

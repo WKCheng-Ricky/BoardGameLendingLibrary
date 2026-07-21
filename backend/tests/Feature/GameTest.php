@@ -41,6 +41,22 @@ class GameTest extends TestCase
         ]);
     }
 
+    public function test_updated_at_auto_updates_on_raw_database_update(): void
+    {
+        $id = DB::table('games')->insertGetId([
+            'title' => 'Original Title',
+            'category' => GameCategory::Strategy->value,
+        ]);
+
+        $this->assertDatabaseHas('games', ['id' => $id, 'updated_at' => null]);
+
+        DB::table('games')->where('id', $id)->update(['title' => 'Updated Title']);
+
+        $updatedAt = DB::table('games')->where('id', $id)->value('updated_at');
+
+        $this->assertNotNull($updatedAt);
+    }
+
     public function test_game_casts_category_and_status_to_enums(): void
     {
         $game = Game::factory()->create([
