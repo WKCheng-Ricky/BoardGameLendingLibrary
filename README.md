@@ -49,10 +49,10 @@ erDiagram
 |progress|ticket|description|
 |-|-|-|
 |Completed|`feature/BGLL-01`|Create Laravel Base repository. Create Docker-compose base for Laravel and Mysql 8.4 (Laravel Sail default for PHP 8, decoupled API app in `backend/`)|
-|Worktree - Seperate development|`feature/BGLL-02`|Create Schema for `Games` in MySQL|
-||`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
-||`feature/BGLL-04`|Create ORM model in Laravel|
-||`feature/BGLL-05`|Create API for CRUD of `Games` record|
+|Completed|`feature/BGLL-02`|Create Schema for `Games` in MySQL|
+|Dropped, use "php artisan migrate"|`feature/BGLL-03`|Use Flyway to maintain database updates ... probably doesnt need? One-off task|
+|Completed|`feature/BGLL-04`|Create ORM model in Laravel|
+|Worktree - Seperate development|`feature/BGLL-05`|Create API for CRUD of `Games` record|
 |Completed|`feature/BGLL-06`|Create React base repository|
 |Worktree - Seperate development|`feature/BGLL-07`|Create Frontend Page|
 
