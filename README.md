@@ -66,8 +66,8 @@ WWWUSER=$(id -u) WWWGROUP=$(id -g) docker compose --env-file backend/.env up --b
 
 - The `WWWUSER`/`WWWGROUP` and `--env-file backend/.env` are needed because, unlike `./vendor/bin/sail up` (run from `backend/`), plain `docker compose` from the root doesn't auto-export those or auto-load `backend/.env`.
 - Frontend: http://localhost:5175
-- Backend: http://localhost
+- Backend: http://localhost:8080
 
-For day-to-day backend-only development, `./vendor/bin/sail up` from `backend/` still works as normal (see `backend/compose.yaml`) — just don't run both stacks at once, since they'd fight over the same ports (80, 3306, 5173).
+For day-to-day backend-only development, `./vendor/bin/sail up` from `backend/` still works as normal (see `backend/compose.yaml`) — just don't run both stacks at once, since they'd fight over the same ports (8080, 3306, 5173).
 
 
