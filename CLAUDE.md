@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-This repository currently contains **no application code** — only planning notes in `README.md`. There is no build, lint, or test tooling set up yet, and no package manifests exist. Before assuming any command works, check whether the corresponding scaffolding (Laravel app, React app, Docker Compose files) has actually been created.
+The Laravel backend has been scaffolded in `backend/` (API-only, no bundled frontend starter kit — React is planned as a separate repository per `BGLL-06`). It uses Laravel Sail for local Docker Compose (`backend/compose.yaml`), with MySQL as the database. React frontend code does not exist yet.
 
-Note: `.gitignore` is a CakePHP-oriented template (`/vendor`, `/tmp/cache/...`, CakePHP 2/3 paths), but the plan in `README.md` is to build the backend in **Laravel**. Treat this as a leftover placeholder, not a signal that CakePHP is in use — confirm with the user before relying on either assumption.
+Note: the root `.gitignore` is a leftover CakePHP-oriented template (`/vendor`, `/tmp/cache/...`, CakePHP 2/3 paths) predating the Laravel decision; it does not apply to `backend/`, which has its own Laravel-generated `.gitignore`.
 
 ## Project goal
 
@@ -19,8 +19,8 @@ A community board-game lending library app. Planned features (see `README.md` fo
 
 ## Planned architecture
 
-- **Backend**: Laravel + MySQL 8.0, run via Docker Compose.
-- **Frontend**: React, separate base repository.
+- **Backend**: Laravel (in `backend/`), decoupled JSON API — no Inertia/bundled frontend. MySQL 8.4 (Laravel Sail's default for PHP 8 at scaffold time; the original plan said 8.0, but the project owner chose to keep Sail's default rather than pin down), run via Docker Compose (`backend/compose.yaml`, via `./vendor/bin/sail`).
+- **Frontend**: React, separate base repository, calling the Laravel API over REST/CORS (decoupled, not Inertia).
 - **Schema management**: possibly Flyway for migrations (flagged in README as possibly unnecessary/one-off).
 
 ### Core entity: `Game`
